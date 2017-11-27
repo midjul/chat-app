@@ -19,15 +19,9 @@ io.on("connection", socket => {
     console.log("User was disconnected");
   });
 
-  socket.emit("newMessage", {
-    from: "user@123.com",
-    text: "Some important message",
-    createdAt: new Date().getTime()
-  });
-
   socket.on("createMessage", message => {
     console.log("Create Message", message);
-    socket.emit("newMessage", { ...message, createdAt: new Date().getTime() });
+    io.emit("newMessage", { ...message, createdAt: new Date().getTime() });
   });
 });
 
