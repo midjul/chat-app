@@ -26,10 +26,10 @@ io.on("connection", socket => {
     console.log("User was disconnected");
   });
 
-  socket.on("createMessage", message => {
+  socket.on("createMessage", (message, callback) => {
     console.log("Create Message", message);
     io.emit("newMessage", generateMessage(message.from, message.text));
-
+    callback("This is from the server");
     //    socket.broadcast.emit("newMessage", {...message, createdAt: new Date().getTime()});
   });
 });
