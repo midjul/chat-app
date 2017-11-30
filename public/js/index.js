@@ -2,8 +2,9 @@ const socket = io();
 const form = document.getElementById("message-form");
 
 socket.on("newMessage", message => {
+  let formattedTime = moment(message.createdAt).format("h:mm a");
   let li = document.createElement("li");
-  li.textContent = `${message.from}: ${message.text}`;
+  li.textContent = `${message.from} ${formattedTime}: ${message.text}`;
   document.getElementById("messages").appendChild(li);
 });
 
@@ -51,9 +52,10 @@ locationButton.addEventListener("click", function() {
 });
 
 socket.on("newLocationMessage", function(message) {
+  let formattedTime = moment(message.createdAt).format("h:mm a");
   let li = document.createElement("li");
   let a = document.createElement("a");
-  a.textContent = `${message.from}: My current location`;
+  a.textContent = `${message.from} ${formattedTime}: My current location`;
   a.setAttribute("target", "_blank");
   a.setAttribute("href", message.url);
   li.appendChild(a);
