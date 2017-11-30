@@ -9,14 +9,16 @@ socket.on("newMessage", message => {
 
 form.addEventListener("submit", function(e) {
   e.preventDefault();
-
+  let messageTextbox = this.querySelector("[name=message]");
   socket.emit(
     "createMessage",
     {
       from: "User",
-      text: this.querySelector("input").value
+      text: messageTextbox.value
     },
-    function() {}
+    function() {
+      messageTextbox.value = "";
+    }
   );
 });
 
@@ -26,12 +28,21 @@ locationButton.addEventListener("click", function() {
   if (!navigator.geolocation) {
     return alert("Geolocation not supported by your browser");
   }
+  locationButton.textContent = "Sending location...";
+  locationButton.disabled = true;
   navigator.geolocation.getCurrentPosition(
     function(position) {
-      socket.emit("createLocationMessage", {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      });
+      socket.emit(
+        "createLocationMessage",
+        {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        },
+        function() {
+          locationButton.textContent = "Send location";
+          locationButton.disabled = false;
+        }
+      );
     },
     function() {
       alert("Unable to fetch location.");
