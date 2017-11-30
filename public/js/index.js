@@ -1,6 +1,27 @@
 const socket = io();
 const form = document.getElementById("message-form");
 
+function scrollToBottom() {
+  let messages = document.querySelector("#messages");
+  let newMessage = messages.querySelector("li:last-child");
+  let clientHeight = messages.clientHeight;
+  let scrollTop = messages.scrollTop;
+  let scrollHeight = messages.scrollHeight;
+  let newMessageHeight = newMessage.clientHeight;
+  let lastMessageHeight = newMessage.previousSibling || newMessage;
+
+  if (
+    clientHeight +
+      scrollTop +
+      newMessageHeight +
+      lastMessageHeight.clientHeight >=
+    scrollHeight
+  ) {
+    console.log("should scroll");
+    messages.scrollTop = scrollHeight;
+  }
+}
+
 socket.on("newMessage", message => {
   let formattedTime = moment(message.createdAt).format("h:mm a");
   let template = document.querySelector("#message-template").textContent;
@@ -14,6 +35,7 @@ socket.on("newMessage", message => {
   li.innerHTML = html;
   li.classList.add("message");
   document.getElementById("messages").appendChild(li);
+  scrollToBottom();
 });
 
 form.addEventListener("submit", function(e) {
@@ -74,4 +96,5 @@ socket.on("newLocationMessage", function(message) {
   li.innerHTML = html;
   li.classList.add("message");
   document.getElementById("messages").appendChild(li);
+  scrollToBottom();
 });
