@@ -22,6 +22,18 @@ function scrollToBottom() {
   }
 }
 
+socket.on("connect", function() {
+  let params = parseQuery(window.location.search);
+  socket.emit("join", params, function(err) {
+    if (err) {
+      alert(err);
+      window.location.href = "/";
+    } else {
+      console.log("No error");
+    }
+  });
+});
+
 socket.on("newMessage", message => {
   let formattedTime = moment(message.createdAt).format("h:mm a");
   let template = document.querySelector("#message-template").textContent;
