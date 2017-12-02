@@ -58,7 +58,6 @@ form.addEventListener("submit", function(e) {
   socket.emit(
     "createMessage",
     {
-      from: "User",
       text: messageTextbox.value
     },
     function() {
