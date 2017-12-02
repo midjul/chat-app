@@ -110,3 +110,12 @@ socket.on("newLocationMessage", function(message) {
   document.getElementById("messages").appendChild(li);
   scrollToBottom();
 });
+
+socket.on("updateUserList", function(users) {
+  let ol = `<ol>
+    ${users.map(function(user) {
+      return `<li>${user}</li>`;
+    })} 
+  </ol>`;
+  document.getElementById("users").innerHTML = ol.replace(/\,/g, "");
+});
