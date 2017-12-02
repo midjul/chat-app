@@ -18,11 +18,17 @@
             </div>
             <div class="form-field">
                 <label for="">Display name</label>
-                <input type="text" name="name" autofocus>
+                <input type="text" name="name" autofocus="off">
             </div>
             <div class="form-field">
                 <label for="">Room name</label>
-                <input type="text" name="room">
+                <input class="room-name" type="text" name="room">
+            </div>
+            <div class="form-field">
+                <label for="">Room List</label>
+                <select>
+                    <option value="" disabled="disabled" selected="selected">Please select a Room</option>
+                </select>
             </div>
             <div class="form-field">
                 <button>Join</button>
@@ -30,5 +36,46 @@
         </form>
     </div>
 </body>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+
+    let sl = document.querySelector(".form-field select")
+    let roomName = document.querySelector(".room-name")
+    let name = document.querySelector("[name=name]")
+    sl.selectedIndex = 0;
+    name.value = ""
+    roomName.value = ""
+
+
+    document.querySelector("form").addEventListener("submit", function (e) {
+        if (roomName.textContent.trim() === "") {
+            roomName.value = sl.value;
+        }
+    })
+    roomName.addEventListener("focus", function () {
+        sl.selectedIndex = 0;
+    })
+
+    sl.addEventListener("change", function () {
+        console.log(this.value)
+        roomName.value = ""
+    })
+    let socket = io()
+
+    socket.on("connect", function () {
+
+        socket.emit("getRoomList", function (rooms) {
+            rooms.forEach((room) => {
+                let opt = document.createElement("option")
+                opt.value = room
+                opt.innerHTML = room
+                sl.appendChild(opt)
+            })
+
+
+        })
+    })
+</script>
 
 </html>

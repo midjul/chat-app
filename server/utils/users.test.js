@@ -57,4 +57,10 @@ describe.only("Users", () => {
     expect(found.length).toBe(1);
     expect(found).toInclude(users.users[1].name);
   });
+
+  it.only("should get room list", () => {
+    let rooms = users.getRoomList();
+    expect(rooms.length).toBe(2);
+    expect(rooms[0]).toNotBe(rooms[1]);
+  });
 });
